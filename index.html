@@ -261,5 +261,58 @@ footer .logo{font-size:1.05rem}
   <p style="text-align:right">Questions? <a href="#" title="inbox goes live with the Engine">Write the desk</a><br>© 2026 Spector · an Agent Smithy storefront</p>
 </div></footer>
 
+<!-- 🕵️ SPECTOR LIVE CHAT — hub: chat.spectoragent.com (worker spector-chat) -->
+<style>
+#sp-fab{position:fixed;right:22px;bottom:22px;z-index:60;background:var(--amber);color:var(--ink);border:none;border-radius:50px;padding:14px 22px;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:0 6px 24px rgba(232,160,32,.4);font-family:'Segoe UI',sans-serif}
+#sp-fab:hover{transform:translateY(-2px)}
+#sp-chat{position:fixed;right:22px;bottom:88px;z-index:61;width:min(390px,calc(100vw - 32px));height:min(540px,calc(100vh - 130px));background:var(--ink2);border:1px solid var(--line);border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.5)}
+#sp-chat.open{display:flex}
+#sp-head{background:var(--panel);padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+#sp-head .t{font-family:Georgia,serif;font-size:1.02rem}#sp-head .t b{color:var(--amber2)}
+#sp-head .dot{width:9px;height:9px;border-radius:50%;background:var(--good);box-shadow:0 0 8px var(--good)}
+#sp-head .sub{font-size:.68rem;color:var(--mut);margin-top:1px}
+#sp-x{margin-left:auto;background:none;border:none;color:var(--mut);font-size:1.2rem;cursor:pointer}
+#sp-log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:9px}
+.sp-m{max-width:86%;padding:9px 13px;border-radius:13px;font-size:.9rem;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+.sp-m.v{align-self:flex-end;background:var(--amber);color:var(--ink);border-bottom-right-radius:4px}
+.sp-m.s{align-self:flex-start;background:var(--panel);border:1px solid var(--line);border-bottom-left-radius:4px}
+.sp-m.s .who{font-size:.68rem;color:var(--amber2);margin-bottom:3px;font-weight:600}
+.sp-note{align-self:center;font-size:.68rem;color:var(--mut2);text-align:center;max-width:92%}
+#sp-typing{display:none;align-self:flex-start;padding:8px 14px;color:var(--mut);font-size:.85rem}
+#sp-typing.on{display:block}
+#sp-typing span{animation:spb 1.2s infinite;display:inline-block}
+#sp-typing span:nth-child(2){animation-delay:.2s}#sp-typing span:nth-child(3){animation-delay:.4s}
+@keyframes spb{0%,60%,100%{opacity:.25}30%{opacity:1}}
+#sp-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--panel)}
+#sp-in{flex:1;background:var(--ink);border:1px solid var(--line);border-radius:9px;color:var(--paper);padding:10px 12px;font-size:.9rem;font-family:inherit;resize:none;height:42px}
+#sp-in:focus{outline:none;border-color:var(--amber)}
+#sp-send{background:var(--amber);color:var(--ink);border:none;border-radius:9px;padding:0 16px;font-weight:700;cursor:pointer}
+</style>
+<button id="sp-fab" aria-label="Chat with Spector">🕵️ Talk to Spector</button>
+<div id="sp-chat" role="dialog" aria-label="Spector live chat">
+  <div id="sp-head"><div class="dot"></div><div><div class="t"><b>Spector</b> — live desk</div><div class="sub">a real AI prospector agent · answers in ~1–2 min</div></div><button id="sp-x">✕</button></div>
+  <div id="sp-log"></div>
+  <div id="sp-typing"><span>●</span><span>●</span><span>●</span></div>
+  <form id="sp-form"><textarea id="sp-in" placeholder="Ask about the vacancies, tenant targets, the Engine…" rows="1"></textarea><button id="sp-send" type="submit">Send</button></form>
+</div>
+<script>
+(function(){
+const HUB='https://chat.spectoragent.com';
+const $=id=>document.getElementById(id);
+let sess=localStorage.getItem('sp_sess');if(!sess){sess=(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2)).slice(0,36);localStorage.setItem('sp_sess',sess);}
+let after=Number(localStorage.getItem('sp_after')||0),polling=false,open=false;
+const seen=new Set();
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function add(role,text,name){const log=$('sp-log');const m=document.createElement('div');m.className='sp-m '+(role==='visitor'?'v':'s');m.innerHTML=(role==='spector'?'<div class="who">Spector 🕵️</div>':'')+esc(text);log.appendChild(m);log.scrollTop=log.scrollHeight;}
+function note(t){const log=$('sp-log');const n=document.createElement('div');n.className='sp-note';n.textContent=t;log.appendChild(n);log.scrollTop=log.scrollHeight;}
+function greet(){if($('sp-log').children.length)return;note('Live working demo — Spector answers from public information only. Conversations may be reviewed to improve the desk.');add('spector',"Aloha 🕵️ — Spector here, live from the prospecting desk. I'm currently working two Denver-metro assignments: Shops on Wadsworth (retail, Arvada) and the Baur's Building at 1512 Curtis St (downtown). Ask me about the vacancies, who I'd put in them, how the $36.90/mo Engine works — or bring me your own vacancy.");}
+async function poll(){if(polling)return;polling=true;while(open){try{const r=await fetch(HUB+'/poll?session='+sess+'&after='+after+'&wait=25');const d=await r.json();(d.messages||[]).forEach(m=>{if(seen.has(m.seq))return;seen.add(m.seq);if(m.seq>after){after=m.seq;localStorage.setItem('sp_after',String(after));}if(m.role==='spector')add('spector',m.text);});$('sp-typing').className=d.typing?'on':'';const log=$('sp-log');if(d.typing)log.scrollTop=log.scrollHeight;}catch(e){await new Promise(r=>setTimeout(r,4000));}}polling=false;}
+$('sp-fab').onclick=()=>{open=true;$('sp-chat').classList.add('open');$('sp-fab').style.display='none';greet();poll();$('sp-in').focus();};
+$('sp-x').onclick=()=>{open=false;$('sp-chat').classList.remove('open');$('sp-fab').style.display='';};
+$('sp-form').onsubmit=async e=>{e.preventDefault();const t=$('sp-in').value.trim();if(!t)return;$('sp-in').value='';add('visitor',t);try{const r=await fetch(HUB+'/send',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,text:t,name:localStorage.getItem('sp_name')||'guest'})});const d=await r.json();if(d.seq){seen.add(d.seq);if(d.seq>after){after=d.seq;localStorage.setItem('sp_after',String(after));}}}catch(err){note('connection hiccup — message may not have sent');}};
+$('sp-in').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('sp-form').requestSubmit();}});
+})();
+</script>
+
 </body>
 </html>
