@@ -105,6 +105,27 @@ footer{border-top:1px solid var(--line);padding:44px 0 54px;background:#0d151c}
 footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px}
 footer p{color:var(--mut2);font-size:.82rem;max-width:520px}
 footer .logo{font-size:1.05rem}
+
+/* ── mobile pass (Admiral 2026-08-09) ── */
+@media(max-width:720px){
+  nav .wrap{height:auto;min-height:56px;padding:10px 16px;flex-wrap:wrap;gap:8px}
+  .logo{font-size:1.1rem}
+  .logo span{display:none}               /* hide 'tenant prospecting desk' subtitle */
+  nav .links{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+  nav .links a{margin-left:0;margin-right:10px;font-size:.8rem}
+  nav .links a.cta{padding:7px 11px;font-size:.78rem;margin-right:0;white-space:nowrap}
+  header{padding:56px 0 44px}
+  .lead{font-size:1rem}
+  .hero-ctas{gap:10px}
+  .btn{padding:12px 18px;font-size:.9rem;width:100%;text-align:center}
+  .strip .wrap{padding:16px 16px}
+  .stat{min-width:44%;padding:8px 4px}
+  /* floating chat button: circle, tucked, never overlaps CTAs */
+  #sp-fab{right:14px;bottom:14px;width:58px;height:58px;padding:0;font-size:0;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  #sp-fab::after{content:"🕵️";font-size:26px}
+  #sp-chat{right:8px;left:8px;bottom:84px;width:auto;height:min(520px,calc(100vh - 110px))}
+  body{padding-bottom:0}
+}
 </style>
 </head>
 <body>
