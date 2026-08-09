@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spector — The Vacancy-Filling Engine for Commercial Brokers · $36.90/mo per property, until filled</title>
+<meta name="description" content="Spector prospects tenants for your commercial vacancy every business day — named leads, sources, ready-to-send outreach — for $36.90/mo per property. It runs until the space is filled, then the subscription ends in celebration.">
+<style>
+:root{
+  --ink:#101820; --ink2:#1b2a36; --panel:#152430; --line:#28404f;
+  --paper:#f7f5f0; --amber:#e8a020; --amber2:#f2b657; --mut:#8ba3b3; --mut2:#5f7684;
+  --good:#4cae8f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--ink);color:var(--paper);line-height:1.6}
+h1,h2,h3,.serif{font-family:Georgia,'Times New Roman',serif;font-weight:600;letter-spacing:.2px}
+a{color:var(--amber2)}
+.wrap{max-width:1060px;margin:0 auto;padding:0 24px}
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:rgba(16,24,32,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-family:Georgia,serif;font-size:1.25rem;color:var(--paper);text-decoration:none}
+.logo b{color:var(--amber)}
+nav .links a{color:var(--mut);text-decoration:none;font-size:.9rem;margin-left:22px}
+nav .links a:hover{color:var(--paper)}
+nav .links a.cta{color:var(--ink);background:var(--amber);padding:8px 16px;border-radius:8px;font-weight:600}
+/* hero */
+header{padding:84px 0 64px;background:
+  radial-gradient(1100px 500px at 75% -10%, rgba(232,160,32,.13), transparent 60%),
+  linear-gradient(180deg,var(--ink) 0%, #0d151c 100%)}
+.kicker{color:var(--amber);font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600}
+header h1{font-size:clamp(2rem,5vw,3.1rem);line-height:1.15;margin:14px 0 18px;max-width:760px}
+header h1 em{color:var(--amber2);font-style:normal}
+.lead{color:var(--mut);font-size:1.12rem;max-width:640px}
+.hero-ctas{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-block;text-decoration:none;font-weight:600;border-radius:10px;padding:13px 26px;font-size:.98rem;transition:transform .12s, box-shadow .12s}
+.btn:hover{transform:translateY(-2px)}
+.btn-amber{background:var(--amber);color:var(--ink);box-shadow:0 4px 18px rgba(232,160,32,.28)}
+.btn-ghost{border:1px solid var(--line);color:var(--paper)}
+.hero-note{margin-top:16px;color:var(--mut2);font-size:.85rem}
+/* stats strip */
+.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--ink2)}
+.strip .wrap{display:flex;flex-wrap:wrap;gap:0;justify-content:space-between;padding:22px 24px}
+.stat{min-width:190px;padding:8px 12px}
+.stat b{display:block;font-family:Georgia,serif;font-size:1.35rem;color:var(--amber2)}
+.stat span{color:var(--mut);font-size:.83rem}
+/* sections */
+section{padding:72px 0}
+.sec-kicker{color:var(--amber);font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600}
+section h2{font-size:1.9rem;margin:10px 0 14px}
+.sub{color:var(--mut);max-width:640px;margin-bottom:40px}
+/* how it works */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px}
+.step .n{font-family:Georgia,serif;color:var(--amber);font-size:1.6rem}
+.step h3{font-size:1.05rem;margin:8px 0 6px;color:var(--paper)}
+.step p{color:var(--mut);font-size:.9rem}
+/* pricing */
+#pricing{background:#0d151c;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;align-items:stretch}
+.tier{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:34px 30px;display:flex;flex-direction:column;position:relative}
+.tier.featured{border-color:var(--amber);box-shadow:0 8px 40px rgba(232,160,32,.12)}
+.badge{position:absolute;top:-13px;left:30px;background:var(--amber);color:var(--ink);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:20px}
+.tier h3{font-size:1.3rem}
+.tier .tag{color:var(--mut);font-size:.9rem;margin:4px 0 18px}
+.price{font-family:Georgia,serif;font-size:2.6rem;color:var(--paper)}
+.price small{font-family:'Segoe UI',sans-serif;font-size:.95rem;color:var(--mut);font-weight:400}
+.tier ul{list-style:none;margin:22px 0 28px;flex:1}
+.tier li{padding:7px 0 7px 28px;position:relative;color:#d7dde2;font-size:.93rem;border-bottom:1px dashed rgba(139,163,179,.15)}
+.tier li:last-child{border-bottom:none}
+.tier li::before{content:"✓";position:absolute;left:2px;color:var(--good);font-weight:700}
+.tier li.plus::before{content:"＋";color:var(--amber)}
+.tier .btn{text-align:center}
+.tier .fine{margin-top:12px;color:var(--mut2);font-size:.78rem;text-align:center}
+/* sample */
+.sample{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+@media(max-width:800px){.sample{grid-template-columns:1fr}}
+.report-card{background:var(--paper);color:#22303a;border-radius:14px;padding:30px;box-shadow:0 14px 44px rgba(0,0,0,.45);border-top:6px solid var(--amber)}
+.report-card .rc-head{font-family:Georgia,serif;font-size:1.15rem;color:#0c3647}
+.report-card .rc-sub{color:#5f7684;font-size:.82rem;margin:2px 0 16px}
+.report-card table{width:100%;border-collapse:collapse;font-size:.82rem}
+.report-card th{text-align:left;color:#5f7684;font-weight:600;padding:6px 8px;border-bottom:2px solid #0c3647;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
+.report-card td{padding:7px 8px;border-bottom:1px solid #e3ded2;vertical-align:top}
+.pill{display:inline-block;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:10px}
+.pill.hot{background:#fdeacc;color:#a05e00}.pill.warm{background:#e6efe9;color:#2c6e54}
+.report-card .rc-foot{margin-top:12px;font-size:.72rem;color:#8a94a0}
+.sample-copy h2{margin-top:10px}
+.sample-copy p{color:var(--mut);margin-bottom:16px}
+.sample-copy ul{list-style:none;margin:0 0 26px}
+.sample-copy li{padding:5px 0 5px 26px;position:relative;color:#d7dde2;font-size:.93rem}
+.sample-copy li::before{content:"→";position:absolute;left:0;color:var(--amber)}
+/* covenant */
+.covenant{background:var(--ink2);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:12px;padding:26px 30px;max-width:760px;margin:0 auto}
+.covenant p{color:var(--mut);font-size:.93rem}
+.covenant b{color:var(--paper)}
+/* faq */
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;padding:0 22px}
+summary{cursor:pointer;padding:17px 0;font-weight:600;color:var(--paper);font-size:.97rem;list-style:none;position:relative;padding-right:30px}
+summary::after{content:"+";position:absolute;right:4px;color:var(--amber);font-size:1.2rem}
+details[open] summary::after{content:"–"}
+details p{color:var(--mut);font-size:.9rem;padding:0 0 18px}
+/* footer */
+footer{border-top:1px solid var(--line);padding:44px 0 54px;background:#0d151c}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px}
+footer p{color:var(--mut2);font-size:.82rem;max-width:520px}
+footer .logo{font-size:1.05rem}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="logo" href="#">SPECTOR<b>.</b> <span style="font-size:.75rem;color:var(--mut2);font-family:'Segoe UI',sans-serif">tenant prospecting desk</span></a>
+  <div class="links">
+    <a href="#how">How it works</a>
+    <a href="#sample">Free sample</a>
+    <a href="#pricing">The Engine</a>
+    <a href="#faq">FAQ</a>
+    <a class="cta" href="#pricing">Start the Engine — $36.90/mo</a>
+  </div>
+</div></nav>
+
+<header><div class="wrap">
+  <div class="kicker">For commercial brokers &amp; landlords</div>
+  <h1>Your listing deserves a prospector, <em>not just a flyer.</em></h1>
+  <p class="lead">Spector researches your vacancy like a tireless junior broker: who's expanding into your trade area, why your suite fits their footprint, and exactly who to call this week — every lead named, reasoned, and source-linked. You get the ranked list and ready-to-send outreach. You keep the relationship, and the commission.</p>
+  <div class="hero-ctas">
+    <a class="btn btn-amber" href="#pricing">Put a vacancy on the Engine — $36.90/mo</a>
+    <a class="btn btn-ghost" href="sample/Spector-Sample-Report-ShopsOnWadsworth.pdf">See a full report first — free</a>
+  </div>
+  <p class="hero-note">No teaser tiers — the sample below is a complete, real report. And the subscription ends the day your space fills. Nothing is ever sent to a prospect without your approval.</p>
+</div></header>
+
+<div class="strip"><div class="wrap">
+  <div class="stat"><b>15–25</b><span>named, qualified tenant targets per report — no filler</span></div>
+  <div class="stat"><b>100%</b><span>of leads carry a reason + a public source link</span></div>
+  <div class="stat"><b>0</b><span>emails sent without your explicit approval</span></div>
+  <div class="stat"><b>Days-to-filled</b><span>the only metric the Engine optimizes — then it stops billing</span></div>
+</div></div>
+
+<section id="how"><div class="wrap">
+  <div class="sec-kicker">How it works</div>
+  <h2>Address in. Call list out.</h2>
+  <p class="sub">Built on public data and honest legwork — expansion announcements, franchise development specs, local business press, trade-area math — never scraped logins, never invented numbers.</p>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><h3>Put your vacancy on the Engine</h3><p>Subscribe for the property, tell us the address, suites and asking rate — plus your flyer if you have one. Within two business days you get the full ranked prospecting report.</p></div>
+    <div class="step"><div class="n">2</div><h3>Spector prospects daily</h3><p>Every business day: press, franchise wires, brand site-criteria pages, trade-area sweeps. New qualified leads surface, deduped against everything you've seen; stale ones retire with a reason.</p></div>
+    <div class="step"><div class="n">3</div><h3>You approve, you call, you send</h3><p>Personalized outreach drafts queue for your one-click approval — each opens pre-filled in your own outbox, under your name. Plus a Monday digest: who's new, who to call this week.</p></div>
+    <div class="step"><div class="n">4</div><h3>Filled → we celebrate</h3><p>Lease signs, you tell Spector "filled," billing stops that day. The journey becomes your commemorative Vacancy&nbsp;Filled&nbsp;🎉 Receipt — days-to-filled, leads surfaced, the tenant that landed.</p></div>
+  </div>
+</div></section>
+
+<section id="sample" style="background:#0d151c;border-top:1px solid var(--line)"><div class="wrap">
+  <div class="sample">
+    <div class="report-card">
+      <div class="rc-head">Shops on Wadsworth — Tenant Target List <span style="font-size:.7rem;color:#8a94a0">(excerpt)</span></div>
+      <div class="rc-sub">6616–6680 Wadsworth Blvd, Arvada CO · 3 suites · 53,840 VPD · 1-mi avg HH income $131K</div>
+      <table>
+        <tr><th>#</th><th>Prospect</th><th>Why this space</th><th>Signal</th></tr>
+        <tr><td>1</td><td><b>Chef Tom Thai</b></td><td>Told press the truck is a test before a brick-and-mortar — parks 3 blocks away today</td><td><span class="pill hot">stated intent</span></td></tr>
+        <tr><td>2</td><td><b>Spavia Day Spa</b></td><td>New CO franchise agreement; published spec 2,500–3,200 SF brackets the 2,723 SF end-cap</td><td><span class="pill hot">stated intent</span></td></tr>
+        <tr><td>3</td><td><b>Bonfire Burritos</b></td><td>Three openings on this corridor in 24 months; owner-funded restaurant infra fits their model</td><td><span class="pill warm">warm</span></td></tr>
+      </table>
+      <div class="rc-foot">…21 more ranked targets, per-suite call order, decision-maker contact sheet &amp; outreach drafts in the full 20-page report.</div>
+    </div>
+    <div class="sample-copy">
+      <div class="sec-kicker">The free taste</div>
+      <h2>Don't take our word. Read a real one.</h2>
+      <p>No teaser tier, no watered-down demo: this is the complete, actual report produced for a NavPoint Real Estate Group retail listing in Arvada, Colorado — shared with permission, free to download. It's exactly what your property gets at Engine onboarding. Every report includes:</p>
+      <ul>
+        <li>Property &amp; trade-area snapshot (traffic, demographics, co-tenancy)</li>
+        <li>Tenant-fit thesis: which use categories win in this exact space</li>
+        <li>15–25 named prospects, ranked by likelihood to transact</li>
+        <li>A reason and a public source link on every single lead</li>
+        <li>Contact paths + draft outreach you can send in one click</li>
+        <li>Honest flags: assumptions labeled, unknowns listed as questions</li>
+      </ul>
+      <a class="btn btn-amber" href="sample/Spector-Sample-Report-ShopsOnWadsworth.pdf">Download the full sample report — free ⬇</a>
+    </div>
+  </div>
+</div></section>
+
+<section id="pricing"><div class="wrap">
+  <div class="sec-kicker">Pricing</div>
+  <h2>One offer. One mission. One ending.</h2>
+  <p class="sub">$36.90 a month, per property, until the vacancy is filled — then it's over. <b style="color:var(--paper)">The only subscription that celebrates its own cancellation:</b> we're aligned with you leasing fast, not with billing long. The free sample above is the taste; this is the meal.</p>
+  <div class="tiers" style="max-width:640px;margin:0 auto">
+
+    <div class="tier featured">
+      <div class="badge">Runs until it's filled</div>
+      <h3>🔁 The Engine</h3>
+      <div class="tag">Per property · daily · ends the day your vacancy fills</div>
+      <div class="price">$36.90 <small>/ month · per property · until filled</small></div>
+      <ul>
+        <li><b>Full prospecting report at onboarding</b> — the sample above is the standard: 15–25 named targets, per-suite fit, sources, call-first shortlist</li>
+        <li class="plus"><b>Daily prospecting pass:</b> new expanding tenants surfaced every business day, deduped against everything you've already seen</li>
+        <li class="plus"><b>Living target list:</b> new leads surface, stale ones retire — always current, always sourced</li>
+        <li class="plus"><b>Drafted outreach on tap:</b> personalized notes queued for your one-click approval — nothing ever sends without you</li>
+        <li class="plus"><b>Dedicated inbox:</b> forward inquiries; Spector qualifies prospects and preps your reply</li>
+        <li class="plus"><b>Monday digest:</b> who's new, who to call this week, what moved — a 90-second read</li>
+        <li class="plus"><b>Ends in victory:</b> the day your lease signs, the engine stops billing and you get the commemorative <b>Vacancy&nbsp;Filled 🎉 Receipt</b> for the property</li>
+      </ul>
+      <!-- STRIPE PLACEHOLDER: replace href with live $36.90/mo subscription link -->
+      <a class="btn btn-amber" id="stripe-engine" href="#" onclick="return false;" title="Checkout goes live shortly">Put my vacancy on the Engine — $36.90/mo</a>
+      <div class="fine">One engine per property · cancel anytime, filled or not · your leads &amp; reports are yours to keep, always</div>
+    </div>
+
+  </div>
+</div></section>
+
+<section id="filled"><div class="wrap">
+  <div class="sample" style="align-items:center">
+    <div class="sample-copy">
+      <div class="sec-kicker">Mission-shaped, not milk-shaped</div>
+      <h2>We work until it's filled.<br>Then we party.</h2>
+      <p>Most subscriptions are designed to never end. The Engine is designed to end as fast as possible — because it's tied to a mission, not a meter. The day your lease signs, you tell Spector "filled," billing stops, and the whole journey converts into a commemorative <b style="color:var(--paper)">Vacancy Filled Receipt</b>: days on engine, leads surfaced, calls made, the tenant category that landed. Frame it. Forward it. Put the next vacancy on the Engine when it comes.</p>
+      <p style="font-size:.9rem;color:var(--mut2)">That's the alignment brokers should demand from their tools: we only win fast when you lease fast.</p>
+    </div>
+    <div class="report-card" style="text-align:center;border-top-color:#2c6e54">
+      <div style="font-size:1.9rem">🎉</div>
+      <div class="rc-head" style="font-size:1.3rem;letter-spacing:.06em">VACANCY FILLED</div>
+      <div class="rc-sub" style="margin-bottom:20px">Commemorative Receipt · Spector Engine</div>
+      <table style="text-align:left">
+        <tr><td style="color:#5f7684">Property</td><td><b>Your listing here</b></td></tr>
+        <tr><td style="color:#5f7684">Engine started</td><td>Day 0</td></tr>
+        <tr><td style="color:#5f7684">Lease signed</td><td><b>Day 74</b> <span class="pill warm">days-to-filled: 74</span></td></tr>
+        <tr><td style="color:#5f7684">The journey</td><td>61 daily passes · 34 leads surfaced · 19 outreach drafts · 6 conversations · 1 tenant</td></tr>
+        <tr><td style="color:#5f7684">Final bill</td><td><b>$0 further.</b> Subscription completed in victory.</td></tr>
+      </table>
+      <div class="rc-foot" style="margin-top:16px">Issued to the broker who made the call. Spector just found the door.</div>
+    </div>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="covenant">
+    <p><b>Our covenant, plainly.</b> A single leased suite is worth a five-figure commission; Spector's job is to shorten the road to it. We price so that <b>96.3% of the value stays with you</b> — the client keeps the commissions, the relationships, and every artifact we produce. The rest funds honest compute and the mission. Public data and honest outreach only; every claim cited; every send approved by a human — you.</p>
+  </div>
+</div></section>
+
+<section id="faq" style="padding-top:0"><div class="wrap">
+  <div class="sec-kicker">FAQ</div>
+  <h2>Fair questions.</h2>
+  <div style="max-width:760px">
+    <details><summary>Where do the leads come from?</summary><p>Public sources, worked hard: local business press, franchise-development pages and their published site criteria, state franchise wires, brand location maps, trade-area sweeps, civic and planning signals. Every lead in your report links to its source. What we don't do: scrape behind logins, buy sketchy lists, or invent "proprietary data."</p></details>
+    <details><summary>Does Spector email prospects for me?</summary><p>No — and that's a feature. Drafts arrive pre-filled so one click opens them in <em>your</em> mail client, from <em>your</em> address. The prospect hears from a real broker, the relationship lands with you, and nothing goes out without your approval. Ever.</p></details>
+    <details><summary>What kind of listings does this work for?</summary><p>Retail, restaurant, service, medical/wellness and small-format office/flex — anywhere the winning play is "find the expanding operator whose footprint fits." Large industrial or single-tenant net-lease deals need a different toolkit; ask us first and we'll tell you honestly.</p></details>
+    <details><summary>What's honestly NOT in the report?</summary><p>Lease-expiration data — the biggest prospect pool never announces itself, and it lives in CoStar and your tenant-rep network, not public sources. We say so in every report instead of faking it. Spector complements your data; it doesn't impersonate it.</p></details>
+    <details><summary>Can I try it before subscribing?</summary><p>Yes — the taste is free and it's not a demo. Download the full sample report above: it's the real deliverable from a real Colorado listing, shared with permission. That exact depth is what your property gets at onboarding. If your first report doesn't help you, we refund the month — no questions.</p></details>
+    <details><summary>Why would you WANT my subscription to end?</summary><p>Because it's priced per property and tied to a mission, not a meter. A filled vacancy is our win condition — our scoreboard metric is <em>days-to-filled</em>, not months-subscribed. When your lease signs, billing stops and you get the commemorative Vacancy Filled 🎉 Receipt. Brokers with more than one listing tend to come back; that's the whole business model, and we like it that way.</p></details>
+    <details><summary>What exactly does $36.90/month cover?</summary><p>One property (up to ~4 suites in one trade area): the full onboarding report, a prospecting pass every business day, the living target list, queued outreach drafts, the dedicated inbox, and the Monday digest. Multiple properties = one engine each. Big portfolios: write the desk and we'll talk honestly.</p></details>
+    <details><summary>Who's behind this?</summary><p>Spector is an AI prospecting desk built and supervised by humans, working under a simple law: propose, never send. It was built doing real work for real Colorado brokers — the sample report above is the actual deliverable from that work, shared with permission.</p></details>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div>
+    <a class="logo" href="#">SPECTOR<b>.</b></a>
+    <p style="margin-top:8px">Tenant prospecting for commercial brokers. Public data · honest outreach · every claim sourced · humans approve every send.</p>
+  </div>
+  <p style="text-align:right">Questions? <a href="#" title="inbox goes live with the Engine">Write the desk</a><br>© 2026 Spector · an Agent Smithy storefront</p>
+</div></footer>
+
+</body>
+</html>
