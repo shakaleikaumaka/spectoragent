@@ -307,6 +307,19 @@ footer .logo{font-size:1.05rem}
 #sp-in{flex:1;background:var(--ink);border:1px solid var(--line);border-radius:9px;color:var(--paper);padding:10px 12px;font-size:.9rem;font-family:inherit;resize:none;height:42px}
 #sp-in:focus{outline:none;border-color:var(--amber)}
 #sp-send{background:var(--amber);color:var(--ink);border:none;border-radius:9px;padding:0 16px;font-weight:700;cursor:pointer}
+.sp-m a{color:var(--amber2);text-decoration:underline;word-break:break-all}
+.sp-m.v a{color:var(--ink)}
+.sp-m a.sp-pdf,.sp-note a.sp-pdf{display:inline-block;margin:7px 2px 2px 0;background:var(--amber);color:var(--ink);padding:9px 15px;border-radius:9px;font-weight:700;text-decoration:none;word-break:normal;box-shadow:0 3px 10px rgba(232,160,32,.35)}
+.sp-m a.sp-pdf:active{transform:translateY(1px)}
+.sp-m.v a.sp-pdf{background:var(--ink);color:var(--amber2);box-shadow:none}
+.sp-note a{color:var(--amber2)}
+@media(max-width:520px){
+  #sp-chat{right:0;left:0;bottom:0;width:100vw;height:100dvh;max-height:100dvh;border-radius:0;border:none;border-top:1px solid var(--line)}
+  #sp-log{-webkit-overflow-scrolling:touch}
+  #sp-in{font-size:16px}
+  #sp-form{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+  #sp-fab{right:14px;bottom:calc(14px + env(safe-area-inset-bottom))}
+}
 </style>
 <button id="sp-fab" aria-label="Chat with Spector">🕵️ Talk to Spector</button>
 <div id="sp-chat" role="dialog" aria-label="Spector live chat">
@@ -323,8 +336,15 @@ let sess=localStorage.getItem('sp_sess');if(!sess){sess=(crypto.randomUUID?crypt
 let after=Number(localStorage.getItem('sp_after')||0),polling=false,open=false;
 const seen=new Set();
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
-function add(role,text,name){const log=$('sp-log');const m=document.createElement('div');m.className='sp-m '+(role==='visitor'?'v':'s');m.innerHTML=(role==='spector'?'<div class="who">Spector 🕵️</div>':'')+esc(text);log.appendChild(m);log.scrollTop=log.scrollHeight;}
-function note(t){const log=$('sp-log');const n=document.createElement('div');n.className='sp-note';n.textContent=t;log.appendChild(n);log.scrollTop=log.scrollHeight;}
+function shortUrl(u){try{const x=new URL(u);const p=decodeURIComponent(x.pathname.split('/').filter(Boolean).pop()||'');let t=p?x.hostname+'/…/'+p:x.hostname;return t.length>44?t.slice(0,42)+'…':t;}catch(e){return u.length>44?u.slice(0,42)+'…':u}}
+function anchor(url,txt){url=url.replace(/"/g,'%22');const pdf=/\.pdf(\?|#|$)/i.test(url);if(pdf)return '<a class="sp-pdf" href="'+url+'" target="_blank" rel="noopener noreferrer">📄 '+(txt||'Open the PDF report')+'</a>';return '<a href="'+url+'" target="_blank" rel="noopener noreferrer">'+(txt||shortUrl(url))+'</a>';}
+function rich(s){let h=esc(s);
+h=h.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,(m,txt,url)=>anchor(url,txt));
+h=h.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g,(m,pre,url)=>{let trail='';const mm=url.match(/[.,!?;:)\]]+$/);if(mm){trail=mm[0];url=url.slice(0,url.length-trail.length);}return pre+anchor(url)+trail;});
+h=h.replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>');
+return h;}
+function add(role,text,name){const log=$('sp-log');const m=document.createElement('div');m.className='sp-m '+(role==='visitor'?'v':'s');m.innerHTML=(role==='spector'?'<div class="who">Spector 🕵️</div>':'')+rich(text);log.appendChild(m);log.scrollTop=log.scrollHeight;}
+function note(t){const log=$('sp-log');const n=document.createElement('div');n.className='sp-note';n.innerHTML=rich(t);log.appendChild(n);log.scrollTop=log.scrollHeight;}
 function greet(){if($('sp-log').children.length)return;note('Live working demo — Spector answers from public information only. Conversations may be reviewed to improve the desk.');add('spector',"Aloha 🕵️ — Spector here, live from the prospecting desk. I'm currently working two Denver-metro assignments: Shops on Wadsworth (retail, Arvada) and the Baur's Building at 1512 Curtis St (downtown). Ask me about the vacancies, who I'd put in them, how the $36.90/mo desk works (per person, unlimited properties) — or bring me your own vacancy. Have an access code? Type it right here.");}
 async function poll(){if(polling)return;polling=true;while(open){try{const r=await fetch(HUB+'/poll?session='+sess+'&after='+after+'&wait=25');const d=await r.json();(d.messages||[]).forEach(m=>{if(seen.has(m.seq))return;seen.add(m.seq);if(m.seq>after){after=m.seq;localStorage.setItem('sp_after',String(after));}if(m.role==='spector')add('spector',m.text);else if(m.role==='system')note(m.text);});if(d.member)setMember(d.member);$('sp-typing').className=d.typing?'on':'';const log=$('sp-log');if(d.typing)log.scrollTop=log.scrollHeight;}catch(e){await new Promise(r=>setTimeout(r,4000));}}polling=false;}
 $('sp-fab').onclick=()=>{open=true;$('sp-chat').classList.add('open');$('sp-fab').style.display='none';greet();poll();$('sp-in').focus();};
