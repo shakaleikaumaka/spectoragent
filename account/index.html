@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your Gadget Account — Spector</title>
+<meta name="robots" content="noindex">
+<style>
+:root{
+  --ink:#101820; --ink2:#1b2a36; --panel:#152430; --line:#28404f;
+  --paper:#f7f5f0; --amber:#e8a020; --amber2:#f2b657; --mut:#8ba3b3; --mut2:#5f7684;
+  --good:#4cae8f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--ink);color:var(--paper);line-height:1.6;min-height:100vh}
+h1,h2,h3,.serif{font-family:Georgia,'Times New Roman',serif;font-weight:600;letter-spacing:.2px}
+a{color:var(--amber2)}
+header{display:flex;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--line);background:var(--ink2);position:sticky;top:0;z-index:5}
+header .logo{font-family:Georgia,serif;font-size:1.25rem;letter-spacing:1px}
+header .logo b{color:var(--amber2)}
+header .logo a{color:inherit;text-decoration:none}
+header .right{margin-left:auto;display:flex;align-items:center;gap:14px;font-size:.85rem}
+#who{color:var(--good);font-weight:600;display:none}
+#signout{display:none;background:none;border:1px solid var(--line);color:var(--mut);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:.8rem}
+#signout:hover{color:var(--paper);border-color:var(--mut)}
+main{max-width:980px;margin:0 auto;padding:34px 20px 90px}
+.hidden{display:none!important}
+
+/* gate */
+#gate{max-width:430px;margin:8vh auto 0;text-align:center}
+#gate h1{font-size:1.7rem;margin-bottom:8px}
+#gate p{color:var(--mut);font-size:.95rem;margin-bottom:22px}
+#gate form{display:flex;gap:9px}
+#code-in{flex:1;background:var(--ink2);border:1px solid var(--line);border-radius:10px;color:var(--paper);padding:13px 15px;font-size:16px;letter-spacing:1px;text-transform:uppercase}
+#code-in:focus{outline:none;border-color:var(--amber)}
+#gate button{background:var(--amber);color:var(--ink);border:none;border-radius:10px;padding:0 20px;font-weight:700;cursor:pointer;font-size:.95rem}
+#gate-err{color:#e88a7a;font-size:.85rem;margin-top:12px;min-height:1.2em}
+#gate .small{margin-top:26px;font-size:.8rem;color:var(--mut2)}
+
+/* dashboard */
+#dash .hello{margin-bottom:6px;font-size:1.75rem}
+#dash .badge{display:inline-block;background:rgba(76,174,143,.12);border:1px solid var(--good);color:var(--good);border-radius:20px;padding:3px 13px;font-size:.78rem;font-weight:600;margin:4px 0 4px}
+#dash .since{color:var(--mut2);font-size:.82rem;margin-bottom:26px}
+.sec{margin-top:34px}
+.sec h2{font-size:1.05rem;text-transform:uppercase;letter-spacing:2.5px;color:var(--amber2);margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 19px;display:flex;flex-direction:column;gap:7px}
+.card h3{font-size:1.02rem;line-height:1.35}
+.card .prop{color:var(--mut);font-size:.83rem}
+.card .sum{font-size:.86rem;color:var(--paper);opacity:.9;flex:1}
+.card .row{display:flex;align-items:center;gap:10px;margin-top:8px}
+.card .date{color:var(--mut2);font-size:.76rem;margin-left:auto}
+.pdf-btn{display:inline-block;background:var(--amber);color:var(--ink);padding:9px 16px;border-radius:9px;font-weight:700;font-size:.86rem;text-decoration:none;box-shadow:0 3px 10px rgba(232,160,32,.3)}
+.pdf-btn:active{transform:translateY(1px)}
+.empty{color:var(--mut);font-size:.9rem;background:var(--panel);border:1px dashed var(--line);border-radius:14px;padding:22px;text-align:center}
+.ask{background:linear-gradient(135deg,var(--panel),var(--ink2));border:1px solid var(--line);border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.ask .txt{flex:1;min-width:220px}
+.ask .txt b{color:var(--amber2)}
+.ask button{background:var(--amber);color:var(--ink);border:none;border-radius:10px;padding:12px 20px;font-weight:700;cursor:pointer;font-size:.92rem}
+.settings .card{gap:12px}
+.kv{display:flex;gap:10px;font-size:.88rem;flex-wrap:wrap}
+.kv .k{color:var(--mut);min-width:110px}
+.roadmap li{margin:6px 0 6px 18px;font-size:.88rem;color:var(--mut)}
+.roadmap li b{color:var(--paper)}
+footer{border-top:1px solid var(--line);color:var(--mut2);font-size:.78rem;text-align:center;padding:22px 16px 30px}
+@media(max-width:520px){ main{padding-top:24px} #dash .hello{font-size:1.4rem} }
+
+/* chat widget (shared with homepage) */
+#sp-fab{position:fixed;right:22px;bottom:22px;z-index:60;background:var(--amber);color:var(--ink);border:none;border-radius:50px;padding:14px 22px;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:0 6px 24px rgba(232,160,32,.4);font-family:'Segoe UI',sans-serif}
+#sp-fab:hover{transform:translateY(-2px)}
+#sp-chat{position:fixed;right:22px;bottom:88px;z-index:61;width:min(390px,calc(100vw - 32px));height:min(540px,calc(100vh - 130px));background:var(--ink2);border:1px solid var(--line);border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.5)}
+#sp-chat.open{display:flex}
+#sp-head{background:var(--panel);padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+#sp-head .t{font-family:Georgia,serif;font-size:1.02rem}#sp-head .t b{color:var(--amber2)}
+#sp-head .dot{width:9px;height:9px;border-radius:50%;background:var(--good);box-shadow:0 0 8px var(--good)}
+#sp-head .sub{font-size:.68rem;color:var(--mut);margin-top:1px}
+#sp-x{margin-left:auto;background:none;border:none;color:var(--mut);font-size:1.2rem;cursor:pointer}
+#sp-log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:9px;-webkit-overflow-scrolling:touch}
+.sp-m{max-width:86%;padding:9px 13px;border-radius:13px;font-size:.9rem;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+.sp-m.v{align-self:flex-end;background:var(--amber);color:var(--ink);border-bottom-right-radius:4px}
+.sp-m.s{align-self:flex-start;background:var(--panel);border:1px solid var(--line);border-bottom-left-radius:4px}
+.sp-m.s .who{font-size:.68rem;color:var(--amber2);margin-bottom:3px;font-weight:600}
+.sp-note{align-self:center;font-size:.68rem;color:var(--mut2);text-align:center;max-width:92%}
+.sp-m a{color:var(--amber2);text-decoration:underline;word-break:break-all}
+.sp-m.v a{color:var(--ink)}
+.sp-m a.sp-pdf,.sp-note a.sp-pdf{display:inline-block;margin:7px 2px 2px 0;background:var(--amber);color:var(--ink);padding:9px 15px;border-radius:9px;font-weight:700;text-decoration:none;word-break:normal;box-shadow:0 3px 10px rgba(232,160,32,.35)}
+.sp-m a.sp-pdf:active{transform:translateY(1px)}
+.sp-m.v a.sp-pdf{background:var(--ink);color:var(--amber2);box-shadow:none}
+.sp-note a{color:var(--amber2)}
+#sp-typing{display:none;align-self:flex-start;padding:8px 14px;color:var(--mut);font-size:.85rem}
+#sp-typing.on{display:block}
+#sp-typing span{animation:spb 1.2s infinite;display:inline-block}
+#sp-typing span:nth-child(2){animation-delay:.2s}#sp-typing span:nth-child(3){animation-delay:.4s}
+@keyframes spb{0%,60%,100%{opacity:.25}30%{opacity:1}}
+#sp-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--panel)}
+#sp-in{flex:1;background:var(--ink);border:1px solid var(--line);border-radius:9px;color:var(--paper);padding:10px 12px;font-size:.9rem;font-family:inherit;resize:none;height:42px}
+#sp-in:focus{outline:none;border-color:var(--amber)}
+#sp-send{background:var(--amber);color:var(--ink);border:none;border-radius:9px;padding:0 16px;font-weight:700;cursor:pointer}
+@media(max-width:520px){
+  #sp-chat{right:0;left:0;bottom:0;width:100vw;height:100dvh;max-height:100dvh;border-radius:0;border:none;border-top:1px solid var(--line)}
+  #sp-in{font-size:16px}
+  #sp-form{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+  #sp-fab{right:14px;bottom:calc(14px + env(safe-area-inset-bottom))}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><a href="/">SPECTOR<b>.</b></a> <span style="font-size:.72rem;color:var(--mut2)">gadget account</span></div>
+  <div class="right"><span id="who"></span><button id="signout">Sign out</button></div>
+</header>
+
+<main>
+  <!-- CODE GATE -->
+  <section id="gate">
+    <h1>🔑 Your Gadget account</h1>
+    <p>Enter your access code to open your personal desk — every report Spector has ever built for you, in one place.</p>
+    <form id="gate-form">
+      <input id="code-in" placeholder="NAME-WORD-0000" autocomplete="off" autocapitalize="characters">
+      <button type="submit">Open desk</button>
+    </form>
+    <div id="gate-err"></div>
+    <p class="small">Don't have a code? <a href="/#pricing">Get your prospector — $36.90/mo</a> · or ask Spector in the chat, bottom right.</p>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="dash" class="hidden">
+    <h1 class="hello" id="hello">Aloha</h1>
+    <span class="badge" id="plan">Founding member 🔑</span>
+    <div class="since" id="since"></div>
+
+    <div class="ask">
+      <div class="txt"><b>Need another property worked?</b><br><span style="font-size:.88rem;color:var(--mut)">Give Spector an address in the chat — ranked tenant targets, sourced, with outreach drafts. Unlimited properties on your plan.</span></div>
+      <button id="ask-btn">🕵️ Ask Spector</button>
+    </div>
+
+    <div class="sec">
+      <h2>📄 Your reports</h2>
+      <div class="grid" id="reports"></div>
+      <div class="empty hidden" id="no-reports">No reports yet — ask Spector to work your first property and it will appear here.</div>
+    </div>
+
+    <div class="sec settings">
+      <h2>⚙️ Settings</h2>
+      <div class="card">
+        <div class="kv"><span class="k">Member</span><span id="s-name"></span></div>
+        <div class="kv"><span class="k">Plan</span><span>Founding member — unlimited properties</span></div>
+        <div class="kv"><span class="k">Access code</span><span id="s-code" style="letter-spacing:1px"></span> <a href="#" id="s-copy" style="font-size:.8rem">copy</a></div>
+        <div class="kv"><span class="k">Desk email</span><span>reports + questions: <a href="mailto:spector@spectoragent.com">spector@spectoragent.com</a></span></div>
+        <div style="font-size:.78rem;color:var(--mut2)">Your access code is your key — treat it like a password. Report PDFs are private-by-link today; a fully locked vault ships with per-broker memory (below).</div>
+      </div>
+    </div>
+
+    <div class="sec roadmap">
+      <h2>🚧 Coming to your desk</h2>
+      <ul>
+        <li><b>Per-broker private memory</b> — Spector learns your listings, your voice, your book</li>
+        <li><b>Monday digest</b> — who's new, who to call this week, straight to your inbox</li>
+        <li><b>One-click outreach approval</b> — drafts open in your own outbox, under your name</li>
+        <li><b>Team seats</b> — invite your colleagues, each with their own desk</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>SPECTOR — the agent that fills buildings · <a href="/">home</a> · <a href="https://spectorgadget.com">the Gadget vision</a> · built with aloha by the ʻohana 🤙</footer>
+
+<!-- chat widget -->
+<button id="sp-fab" aria-label="Chat with Spector">🕵️ Talk to Spector</button>
+<div id="sp-chat" role="dialog" aria-label="Spector live chat">
+  <div id="sp-head"><div class="dot"></div><div><div class="t"><b>Spector</b> — live desk</div><div class="sub">a real AI prospector agent · answers in ~1–2 min</div></div><button id="sp-x">✕</button></div>
+  <div id="sp-log"></div>
+  <div id="sp-typing"><span>●</span><span>●</span><span>●</span></div>
+  <form id="sp-form"><textarea id="sp-in" placeholder="Ask about a property, tenant targets, your reports…" rows="1"></textarea><button id="sp-send" type="submit">Send</button></form>
+</div>
+
+<script>
+(function(){
+const HUB='https://chat.spectoragent.com';
+const $=id=>document.getElementById(id);
+
+/* ---------- account ---------- */
+async function loadProfile(code){
+  const r=await fetch(HUB+'/account/profile',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({code})});
+  const d=await r.json();
+  if(!d.ok) throw new Error(d.error||'could not load profile');
+  return d.member;
+}
+function fmtDate(ts){try{return new Date(ts).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})}catch(e){return ''}}
+function showDash(code,m){
+  $('gate').classList.add('hidden');$('dash').classList.remove('hidden');
+  $('hello').textContent='Aloha, '+m.name.split(' ')[0]+' 🤙';
+  $('plan').textContent=m.plan||'Member';
+  $('since').textContent='Member since '+fmtDate(m.since)+(m.note?' · '+m.note:'');
+  $('who').textContent='🔑 '+m.name;$('who').style.display='inline';
+  $('signout').style.display='inline-block';
+  $('s-name').textContent=m.name;$('s-code').textContent=code;
+  const g=$('reports');g.innerHTML='';
+  if(!m.reports||!m.reports.length){$('no-reports').classList.remove('hidden');}
+  else{$('no-reports').classList.add('hidden');
+    m.reports.forEach(r=>{
+      const c=document.createElement('div');c.className='card';
+      c.innerHTML='<h3>'+esc(r.title)+'</h3><div class="prop">'+esc(r.property)+'</div><div class="sum">'+esc(r.summary||'')+'</div>'+
+        '<div class="row"><a class="pdf-btn" href="'+encodeURI(r.url)+'" target="_blank" rel="noopener noreferrer">📄 Open report</a><span class="date">'+esc(r.date||'')+'</span></div>';
+      g.appendChild(c);
+    });
+  }
+  localStorage.setItem('sp_code',code);localStorage.setItem('sp_name',m.name);
+}
+$('gate-form').onsubmit=async e=>{
+  e.preventDefault();const code=$('code-in').value.trim().toUpperCase();if(!code)return;
+  $('gate-err').textContent='';
+  try{const m=await loadProfile(code);showDash(code,m);redeemIntoChat(code);}
+  catch(err){$('gate-err').textContent=err.message;}
+};
+$('signout').onclick=()=>{localStorage.removeItem('sp_code');location.reload();};
+$('s-copy') && ($('s-copy').onclick=e=>{e.preventDefault();navigator.clipboard&&navigator.clipboard.writeText($('s-code').textContent);e.target.textContent='copied!';setTimeout(()=>e.target.textContent='copy',1500);});
+$('ask-btn').onclick=()=>{openChat();};
+async function boot(){
+  const saved=localStorage.getItem('sp_code');
+  if(saved){try{const m=await loadProfile(saved);showDash(saved,m);}catch(e){localStorage.removeItem('sp_code');}}
+  const q=new URLSearchParams(location.search).get('code');
+  if(q&&!localStorage.getItem('sp_code')){$('code-in').value=q;}
+}
+async function redeemIntoChat(code){ // membership follows into the live chat session
+  try{await fetch(HUB+'/redeem',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,code})});}catch(e){}
+}
+
+/* ---------- chat widget (same engine as homepage) ---------- */
+let sess=localStorage.getItem('sp_sess');if(!sess){sess=(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2)).slice(0,36);localStorage.setItem('sp_sess',sess);}
+let after=Number(localStorage.getItem('sp_after')||0),polling=false,open=false;
+const seen=new Set();
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function shortUrl(u){try{const x=new URL(u);const p=decodeURIComponent(x.pathname.split('/').filter(Boolean).pop()||'');let t=p?x.hostname+'/…/'+p:x.hostname;return t.length>44?t.slice(0,42)+'…':t;}catch(e){return u.length>44?u.slice(0,42)+'…':u}}
+function anchor(url,txt){url=url.replace(/"/g,'%22');const pdf=/\.pdf(\?|#|$)/i.test(url);if(pdf)return '<a class="sp-pdf" href="'+url+'" target="_blank" rel="noopener noreferrer">📄 '+(txt||'Open the PDF report')+'</a>';return '<a href="'+url+'" target="_blank" rel="noopener noreferrer">'+(txt||shortUrl(url))+'</a>';}
+function rich(s){let h=esc(s);
+h=h.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,(m,txt,url)=>anchor(url,txt));
+h=h.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g,(m,pre,url)=>{let trail='';const mm=url.match(/[.,!?;:)\]]+$/);if(mm){trail=mm[0];url=url.slice(0,url.length-trail.length);}return pre+anchor(url)+trail;});
+h=h.replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>');
+return h;}
+function add(role,text){const log=$('sp-log');const m=document.createElement('div');m.className='sp-m '+(role==='visitor'?'v':'s');m.innerHTML=(role==='spector'?'<div class="who">Spector 🕵️</div>':'')+rich(text);log.appendChild(m);log.scrollTop=log.scrollHeight;}
+function note(t){const log=$('sp-log');const n=document.createElement('div');n.className='sp-note';n.innerHTML=rich(t);log.appendChild(n);log.scrollTop=log.scrollHeight;}
+function greet(){if($('sp-log').children.length)return;const nm=localStorage.getItem('sp_name');add('spector',nm?("Aloha "+nm.split(' ')[0]+" 🕵️ — your desk is open. Give me an address and I'll get prospecting, or ask about any report on your account page."):"Aloha 🕵️ — Spector here. Ask about a property, your reports, or bring me a new vacancy.");}
+async function poll(){if(polling)return;polling=true;while(open){try{const r=await fetch(HUB+'/poll?session='+sess+'&after='+after+'&wait=25');const d=await r.json();(d.messages||[]).forEach(m=>{if(seen.has(m.seq))return;seen.add(m.seq);if(m.seq>after){after=m.seq;localStorage.setItem('sp_after',String(after));}if(m.role==='spector')add('spector',m.text);else if(m.role==='system')note(m.text);});$('sp-typing').className=d.typing?'on':'';const log=$('sp-log');if(d.typing)log.scrollTop=log.scrollHeight;}catch(e){await new Promise(r=>setTimeout(r,4000));}}polling=false;}
+function openChat(){open=true;$('sp-chat').classList.add('open');$('sp-fab').style.display='none';greet();poll();$('sp-in').focus();}
+$('sp-fab').onclick=openChat;
+$('sp-x').onclick=()=>{open=false;$('sp-chat').classList.remove('open');$('sp-fab').style.display='';};
+$('sp-form').onsubmit=async e=>{e.preventDefault();const t=$('sp-in').value.trim();if(!t)return;$('sp-in').value='';
+add('visitor',t);try{const r=await fetch(HUB+'/send',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,text:t,name:localStorage.getItem('sp_name')||'guest'})});const d=await r.json();if(d.seq){seen.add(d.seq);if(d.seq>after){after=d.seq;localStorage.setItem('sp_after',String(after));}}}catch(err){note('connection hiccup — message may not have sent');}};
+$('sp-in').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('sp-form').requestSubmit();}});
+
+boot();
+})();
+</script>
+</body>
+</html>
