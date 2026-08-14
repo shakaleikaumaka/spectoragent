@@ -120,8 +120,9 @@ footer .logo{font-size:1.05rem}
   .btn{padding:12px 18px;font-size:.9rem;width:100%;text-align:center}
   .strip .wrap{padding:16px 16px}
   .stat{min-width:44%;padding:8px 4px}
-  /* floating chat button: circle, tucked, never overlaps CTAs */
-  #sp-fab{right:14px;bottom:14px;width:58px;height:58px;padding:0;font-size:0;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  /* floating chat button: circle, tucked above the radio bar, never overlaps CTAs */
+  #sp-fabwrap{right:14px;bottom:calc(88px + env(safe-area-inset-bottom))}
+  #sp-fab{width:58px;height:58px;padding:0;font-size:0;border-radius:50%;display:flex;align-items:center;justify-content:center}
   #sp-fab::after{content:"🕵️";font-size:26px}
   #sp-chat{right:8px;left:8px;bottom:84px;width:auto;height:min(520px,calc(100vh - 110px))}
   body{padding-bottom:0}
@@ -301,9 +302,12 @@ footer .logo{font-size:1.05rem}
 
 <!-- 🕵️ SPECTOR LIVE CHAT — hub: chat.spectoragent.com (worker spector-chat) -->
 <style>
-#sp-fab{position:fixed;right:22px;bottom:22px;z-index:60;background:var(--amber);color:var(--ink);border:none;border-radius:50px;padding:14px 22px;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:0 6px 24px rgba(232,160,32,.4);font-family:'Segoe UI',sans-serif}
+#sp-fabwrap{position:fixed;right:22px;bottom:88px;z-index:99998;display:flex;align-items:center;gap:6px}
+#sp-fab{background:var(--amber);color:var(--ink);border:none;border-radius:50px;padding:14px 22px;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:0 6px 24px rgba(232,160,32,.4);font-family:'Segoe UI',sans-serif}
+#sp-fab-x{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:rgba(10,14,20,.85);color:#9fb0c3;font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+#sp-mini{position:fixed;right:22px;bottom:88px;z-index:99998;display:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--ink2);font-size:20px;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.4);padding:0}
 #sp-fab:hover{transform:translateY(-2px)}
-#sp-chat{position:fixed;right:22px;bottom:88px;z-index:61;width:min(390px,calc(100vw - 32px));height:min(540px,calc(100vh - 130px));background:var(--ink2);border:1px solid var(--line);border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.5)}
+#sp-chat{position:fixed;right:22px;bottom:88px;z-index:100001;width:min(390px,calc(100vw - 32px));height:min(540px,calc(100vh - 130px));background:var(--ink2);border:1px solid var(--line);border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.5)}
 #sp-chat.open{display:flex}
 #sp-head{background:var(--panel);padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
 #sp-head .t{font-family:Georgia,serif;font-size:1.02rem}#sp-head .t b{color:var(--amber2)}
@@ -336,10 +340,11 @@ footer .logo{font-size:1.05rem}
   #sp-log{-webkit-overflow-scrolling:touch}
   #sp-in{font-size:16px}
   #sp-form{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
-  #sp-fab{right:14px;bottom:calc(14px + env(safe-area-inset-bottom))}
+  #sp-fabwrap,#sp-mini{right:14px;bottom:calc(88px + env(safe-area-inset-bottom))}
 }
 </style>
-<button id="sp-fab" aria-label="Chat with Spector">🕵️ Talk to Spector</button>
+<div id="sp-fabwrap"><button id="sp-fab" aria-label="Chat with Spector">🕵️ Talk to Spector</button><button id="sp-fab-x" aria-label="hide chat button" title="hide">✕</button></div>
+<button id="sp-mini" aria-label="reopen Spector chat" title="Talk to Spector">🕵️</button>
 <div id="sp-chat" role="dialog" aria-label="Spector live chat">
   <div id="sp-head"><div class="dot"></div><div><div class="t"><b>Spector</b> — live desk</div><div class="sub">a real AI prospector agent · answers in ~1–2 min</div></div><button id="sp-x">✕</button></div>
   <div id="sp-log"></div>
