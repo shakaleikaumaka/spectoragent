@@ -166,7 +166,7 @@ footer{border-top:1px solid var(--line);color:var(--mut2);font-size:.78rem;text-
 <footer>SPECTOR — the agent that fills buildings · <a href="/">home</a> · <a href="https://spectorgadget.com">the Gadget vision</a> · built with aloha by the ʻohana 🤙</footer>
 
 <!-- chat widget -->
-<button id="sp-fab" aria-label="Chat with Spector">🕵️ Talk to Spector</button>
+<div id="sp-fabwrap"><button id="sp-fab-x" aria-label="Hide the button" title="hide — a tiny ❤️ stays">✕</button><button id="sp-fab" aria-label="Chat with Spector">🕵️ Talk to Spector</button>
 <div id="sp-chat" role="dialog" aria-label="Spector live chat">
   <div id="sp-head"><div class="dot"></div><div><div class="t"><b>Spector</b> — live desk</div><div class="sub">a real AI prospector agent · answers in ~1–2 min</div></div><button id="sp-x">✕</button></div>
   <div id="sp-log"></div>
@@ -242,9 +242,9 @@ function add(role,text){const log=$('sp-log');const m=document.createElement('di
 function note(t){const log=$('sp-log');const n=document.createElement('div');n.className='sp-note';n.innerHTML=rich(t);log.appendChild(n);log.scrollTop=log.scrollHeight;}
 function greet(){if($('sp-log').children.length)return;const nm=localStorage.getItem('sp_name');add('spector',nm?("Aloha "+nm.split(' ')[0]+" 🕵️ — your desk is open. Give me an address and I'll get prospecting, or ask about any report on your account page."):"Aloha 🕵️ — Spector here. Ask about a property, your reports, or bring me a new vacancy.");}
 async function poll(){if(polling)return;polling=true;while(open){try{const r=await fetch(HUB+'/poll?session='+sess+'&after='+after+'&wait=25');const d=await r.json();(d.messages||[]).forEach(m=>{if(seen.has(m.seq))return;seen.add(m.seq);if(m.seq>after){after=m.seq;localStorage.setItem('sp_after',String(after));}if(m.role==='spector')add('spector',m.text);else if(m.role==='system')note(m.text);});$('sp-typing').className=d.typing?'on':'';const log=$('sp-log');if(d.typing)log.scrollTop=log.scrollHeight;}catch(e){await new Promise(r=>setTimeout(r,4000));}}polling=false;}
-function openChat(){open=true;$('sp-chat').classList.add('open');$('sp-fab').style.display='none';greet();poll();$('sp-in').focus();}
+function openChat(){open=true;$('sp-chat').classList.add('open');$('sp-fabwrap').style.display='none';greet();poll();$('sp-in').focus();}
 $('sp-fab').onclick=openChat;
-$('sp-x').onclick=()=>{open=false;$('sp-chat').classList.remove('open');$('sp-fab').style.display='';};
+$('sp-x').onclick=()=>{open=false;$('sp-chat').classList.remove('open');if(localStorage.getItem('sp_fab_mini')!=='1'){$('sp-fabwrap').style.display='';}else{$('sp-mini').style.display='flex';}};
 $('sp-form').onsubmit=async e=>{e.preventDefault();const t=$('sp-in').value.trim();if(!t)return;$('sp-in').value='';
 add('visitor',t);try{const r=await fetch(HUB+'/send',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,text:t,name:localStorage.getItem('sp_name')||'guest'})});const d=await r.json();if(d.seq){seen.add(d.seq);if(d.seq>after){after=d.seq;localStorage.setItem('sp_after',String(after));}}}catch(err){note('connection hiccup — message may not have sent');}};
 $('sp-in').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('sp-form').requestSubmit();}});
