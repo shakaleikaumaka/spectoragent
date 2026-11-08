@@ -166,7 +166,7 @@ footer{border-top:1px solid var(--line);color:var(--mut2);font-size:.78rem;text-
 <footer>SPECTOR — the agent that fills buildings · <a href="/">home</a> · <a href="https://spectorgadget.com">the Gadget vision</a> · built with aloha by the ʻohana 🤙</footer>
 
 <!-- chat widget -->
-<div id="sp-fabwrap"><button id="sp-fab-x" aria-label="Hide the button" title="hide — a tiny ❤️ stays">✕</button><button id="sp-fab" aria-label="Chat with Spector">🕵️ Talk to Spector</button>
+<div id="sp-fabwrap"><button id="sp-fab-x" aria-label="Hide the button" title="hide — a tiny ❤️ stays">✕</button><button id="sp-fab" aria-label="Chat with Spector">🕵️ Talk to Spector</button></div>
 <div id="sp-chat" role="dialog" aria-label="Spector live chat">
   <div id="sp-head"><div class="dot"></div><div><div class="t"><b>Spector</b> — live desk</div><div class="sub">a real AI prospector agent · answers in ~1–2 min</div></div><button id="sp-x">✕</button></div>
   <div id="sp-log"></div>
@@ -260,6 +260,7 @@ $('sp-in').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.pre
 boot();
 })();
 </script>
+<script defer src="/ohana-beacon.js" data-hub="spector" data-anchor="#sp-chat" data-place="append"></script>
 <script src="https://oso-flow-hytgh2qkur-ffieyo32.taur.link/widget.js" defer></script>
 <script src="https://shakaleikaumaka.com/assets/x402-tip.js?v=1.3" defer></script>
 </body>
