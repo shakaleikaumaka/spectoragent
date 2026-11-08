@@ -66,9 +66,13 @@ footer{border-top:1px solid var(--line);color:var(--mut2);font-size:.78rem;text-
 @media(max-width:520px){ main{padding-top:24px} #dash .hello{font-size:1.4rem} }
 
 /* chat widget (shared with homepage) */
-#sp-fab{position:fixed;right:22px;bottom:22px;z-index:60;background:var(--amber);color:var(--ink);border:none;border-radius:50px;padding:14px 22px;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:0 6px 24px rgba(232,160,32,.4);font-family:'Segoe UI',sans-serif}
+/* fab sits above the 🦋/🎵 radio miniplayer (bottom-right 14px) — same geometry as the home page */
+#sp-fabwrap{position:fixed;right:22px;bottom:88px;z-index:99998;display:flex;align-items:center;gap:6px}
+#sp-fab-x{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:rgba(10,14,20,.85);color:#9fb0c3;font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+#sp-mini{position:fixed;right:22px;bottom:88px;z-index:99998;display:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--ink2);font-size:20px;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.4);padding:0}
+#sp-fab{background:var(--amber);color:var(--ink);border:none;border-radius:50px;padding:14px 22px;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:0 6px 24px rgba(232,160,32,.4);font-family:'Segoe UI',sans-serif}
 #sp-fab:hover{transform:translateY(-2px)}
-#sp-chat{position:fixed;right:22px;bottom:88px;z-index:61;width:min(390px,calc(100vw - 32px));height:min(540px,calc(100vh - 130px));background:var(--ink2);border:1px solid var(--line);border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.5)}
+#sp-chat{position:fixed;right:22px;bottom:88px;z-index:100001;width:min(390px,calc(100vw - 32px));height:min(540px,calc(100vh - 130px));background:var(--ink2);border:1px solid var(--line);border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.5)}
 #sp-chat.open{display:flex}
 #sp-head{background:var(--panel);padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
 #sp-head .t{font-family:Georgia,serif;font-size:1.02rem}#sp-head .t b{color:var(--amber2)}
@@ -100,7 +104,7 @@ footer{border-top:1px solid var(--line);color:var(--mut2);font-size:.78rem;text-
   #sp-chat{right:0;left:0;bottom:0;width:100vw;height:100dvh;max-height:100dvh;border-radius:0;border:none;border-top:1px solid var(--line)}
   #sp-in{font-size:16px}
   #sp-form{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
-  #sp-fab{right:14px;bottom:calc(14px + env(safe-area-inset-bottom))}
+  #sp-fabwrap,#sp-mini{right:14px;bottom:calc(88px + env(safe-area-inset-bottom))}
 }
 </style>
 </head>
@@ -120,7 +124,7 @@ footer{border-top:1px solid var(--line);color:var(--mut2);font-size:.78rem;text-
       <button type="submit">Open desk</button>
     </form>
     <div id="gate-err"></div>
-    <p class="small">Don't have a code? <a href="/#pricing">Get your prospector — $36.90/mo</a> · or ask Spector in the chat, bottom right.</p>
+    <p class="small">Don't have a code? Member desks are invite-only for now — broker subscriptions are coming. Live today: the one-time <a href="/chiang-mai/report/">$36.90 Chiang Mai report</a> · or ask Spector in the chat, bottom right.<br>Spector is an information service — not a broker, and not legal, tax or financial advice.</p>
   </section>
 
   <!-- DASHBOARD -->
@@ -167,6 +171,7 @@ footer{border-top:1px solid var(--line);color:var(--mut2);font-size:.78rem;text-
 
 <!-- chat widget -->
 <div id="sp-fabwrap"><button id="sp-fab-x" aria-label="Hide the button" title="hide — a tiny ❤️ stays">✕</button><button id="sp-fab" aria-label="Chat with Spector">🕵️ Talk to Spector</button></div>
+<button id="sp-mini" aria-label="reopen Spector chat" title="Talk to Spector">🕵️</button>
 <div id="sp-chat" role="dialog" aria-label="Spector live chat">
   <div id="sp-head"><div class="dot"></div><div><div class="t"><b>Spector</b> — live desk</div><div class="sub">a real AI prospector agent · answers in ~1–2 min</div></div><button id="sp-x">✕</button></div>
   <div id="sp-log"></div>
@@ -201,7 +206,7 @@ function showDash(code,m){
     m.reports.forEach(r=>{
       const c=document.createElement('div');c.className='card';
       c.innerHTML='<h3>'+esc(r.title)+'</h3><div class="prop">'+esc(r.property)+'</div><div class="sum">'+esc(r.summary||'')+'</div>'+
-        '<div class="row"><a class="pdf-btn" href="'+encodeURI(r.url)+'" target="_blank" rel="noopener noreferrer">📄 Open report</a><span class="date">'+esc(r.date||'')+'</span></div>';
+        '<div class="row"><a class="pdf-btn" href="'+(/^https?:\/\//i.test(r.url||'')?encodeURI(r.url).replace(/"/g,'%22'):'#')+'" target="_blank" rel="noopener noreferrer">📄 Open report</a><span class="date">'+esc(r.date||'')+'</span></div>';
       g.appendChild(c);
     });
   }
@@ -250,12 +255,17 @@ function kick(){if(!open)return;try{pollCtl&&pollCtl.abort()}catch(e){}sync().th
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)kick();});
 window.addEventListener('focus',kick);window.addEventListener('online',kick);window.addEventListener('pageshow',kick);
 setInterval(()=>{if(open&&Date.now()-lastBeat>45000)kick();},15000);
-function openChat(){open=true;$('sp-chat').classList.add('open');$('sp-fabwrap').style.display='none';greet();poll();$('sp-in').focus();}
+function openChat(){open=true;$('sp-chat').classList.add('open');$('sp-fabwrap').style.display='none';$('sp-mini').style.display='none';greet();poll();$('sp-in').focus();}
 $('sp-fab').onclick=openChat;
 $('sp-x').onclick=()=>{open=false;$('sp-chat').classList.remove('open');if(localStorage.getItem('sp_fab_mini')!=='1'){$('sp-fabwrap').style.display='';}else{$('sp-mini').style.display='flex';}};
 $('sp-form').onsubmit=async e=>{e.preventDefault();const t=$('sp-in').value.trim();if(!t)return;$('sp-in').value='';
 add('visitor',t);try{const r=await fetch(HUB+'/send',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,text:t,name:localStorage.getItem('sp_name')||'guest'})});const d=await r.json();if(d.seq){seen.add(d.seq);}/* cursor law 2026-09-27 (shaka-home scar): never advance 'after' on our own echo — the poll loop consumes it (visitor messages do not render) and can then never skip a reply that interleaved on the hub's global seq. */}catch(err){note('connection hiccup — message may not have sent');}};
 $('sp-in').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('sp-form').requestSubmit();}});
+// the ✕ bows the pill out to a tiny 🕵️ (same as the home page)
+(function(){var fx=$('sp-fab-x'),fw=$('sp-fabwrap'),mn=$('sp-mini');if(!fx||!fw||!mn)return;
+fx.onclick=function(e){e.stopPropagation();fw.style.display='none';mn.style.display='flex';try{localStorage.setItem('sp_fab_mini','1');}catch(err){}};
+mn.onclick=function(e){e.stopPropagation();mn.style.display='none';fw.style.display='';try{localStorage.removeItem('sp_fab_mini');}catch(err){}};
+try{if(localStorage.getItem('sp_fab_mini')==='1'){fw.style.display='none';mn.style.display='flex';}}catch(err){}})();
 
 boot();
 })();

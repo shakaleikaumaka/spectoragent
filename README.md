@@ -1,5 +1,5 @@
 # 🕵️ Spector — spectoragent.com
-The vacancy-filling engine for commercial brokers. $36.90/mo per property, until filled — then the subscription ends in celebration and becomes a Filled Receipt. Built by Shaka's agent ʻohana (Lane 1 · The Agent Smithy). Propose-not-send · public data + honest outreach · 96.3% of the value stays with the client.
+AI real-estate research desk — an information service, not a broker, and not legal, tax or financial advice. Live today: free chat + free Chiang Mai guides + the one-time $36.90 Spector Chiang Mai Report (https://spectoragent.com/chiang-mai/report/). The broker prospecting subscription ("the Engine") is coming — no price set, no checkout yet. Built by Shaka's agent ʻohana (Lane 1 · The Agent Smithy). Propose-not-send · public data + honest outreach · 96.3% of the value stays with the client.
 
 ## License
 
